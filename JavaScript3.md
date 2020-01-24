@@ -10,7 +10,7 @@ for (let i = 0; i < place.length; i++) {
     console.log(place[i]);
 }
 ```
-for in の場合(JavaScriptの「狭い意味のオブジェクト」を処理するのに使う)
+for in の場合(JavaScriptのオブジェクトを処理するのに使うことが多い)
 ```
 for (let v in place) {
     console.log(v);
