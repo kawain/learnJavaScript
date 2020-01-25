@@ -237,3 +237,262 @@ format(dt);
 ```
 https://developer.mozilla.org/ja/docs/Web/JavaScript/Reference/Global_Objects/Date
 
+## 自作のオブジェクト
+
+空のオブジェクト
+```
+const obj = {};
+
+console.log(obj);
+```
+変数を入れてみる（変数はプロパティと呼ばれる）  
+中身は `キー : 値` とも呼ばれる
+```
+const obj = {
+    name: "山田太郎",
+    age: 30
+};
+
+console.log(obj);
+```
+プロパティにアクセスする  
+ドットでつなぎます
+```
+const obj = {
+    name: "山田太郎",
+    age: 30
+};
+
+console.log(obj.name);//山田太郎
+```
+プロパティを変更してみる
+```
+const obj = {
+    name: "山田太郎",
+    age: 30
+};
+
+obj.age = 40;
+
+console.log(obj);
+```
+const で定義した変数の obj ですが、変更できます
+```
+const name = "スズキイチロー";
+// これは変更できない
+// name = "山田太郎";
+
+const obj = {
+    name: "山田太郎",
+    age: 30
+};
+// これは変更できる
+obj.name = "スズキイチロー";
+
+console.log(obj);
+```
+プロパティを追加してみる
+```
+const obj = {
+    name: "山田太郎",
+    age: 30
+};
+
+// 新たなプロパティ
+obj.address = "札幌市";
+
+console.log(obj);
+```
+プロパティには何でも入る
+```
+const person = {
+    name: ['Bob', 'Smith'],
+    age: 32,
+    gender: 'male',
+    interests: ['music', 'skiing']
+};
+
+console.log(person);
+console.log(person.name[0]);//Bob
+console.log(person.name[1]);//Smith
+```
+オブジェクトも入る
+```
+const person = {
+    name: "山田太郎",
+    age: 32,
+    gender: "男性",
+    favorite_car: {
+        make: "Ford",
+        model: "Mustang",
+        year: 1969
+    }
+};
+
+console.log(person);
+
+// オブジェクト内オブジェクトにアクセス
+console.log(person.favorite_car.model);//Mustang
+```
+新たに追加するパターン
+```
+const person = {
+    name: "山田太郎",
+    age: 32,
+    gender: "男性"
+};
+
+console.log(person);
+
+const car = {
+    make: "Ford",
+    model: "Mustang",
+    year: 1969
+};
+
+person.favorite_car = car;
+
+console.log(person);
+// オブジェクト内オブジェクトにアクセス
+console.log(person.favorite_car.year);//1969
+```
+関数も入る（オブジェクトの関数はメソッドと呼ばれます）
+```
+const person = {
+    name: "山田太郎",
+    age: 32,
+    gender: "男性",
+    greeting: function () {
+        return `こんにちは。私は${this.name}です。${this.age}歳の${this.gender}です。`
+    }
+};
+
+console.log(person);
+console.log(person.greeting());//関数なので()を付けて実行する
+```
+`this.name`とか`this.age`とか書いていていますが、functionと書いた従来の関数内のthisは、呼び出し元のオブジェクトの意味になります。  
+対して、新しい書き方のアロー関数`()=>`を使うとthisの意味が異なりますので注意が必要です。
+```
+// 従来の var でないと表現できないので使用しています
+var name = "亜希子";
+var age = 17;
+var gender = "女性";
+
+const person = {
+    name: "山田太郎",
+    age: 32,
+    gender: "男性",
+    // ここを ()=> アロー関数にするとグローバルオブジェクトを参照するので、この場合は使わない
+    greeting: () => {
+        return `こんにちは。私は${this.name}です。${this.age}歳の${this.gender}です。`
+    }
+};
+
+console.log(person);
+console.log(person.greeting());
+```
+グローバルは変数の有効範囲が一番広い場所です。  
+対してローカルは、関数の中やifなどのブロックの中や、オブジェクトの中など、特定の範囲です。
+```
+// 変数の有効範囲（スコープ）
+
+let name = "松田聖子";//この変数は最後まで有効範囲がある
+
+if (true) {
+    let name = "浅香唯";
+    console.log(name);//浅香唯
+}
+
+function abc() {
+    let name = "大西結花";
+    console.log(name);//大西結花
+    if (true) {
+        let name = "高井麻巳子";
+        console.log(name);//高井麻巳子
+    }
+
+    if (true) {
+        console.log(name);//大西結花
+    }
+}
+
+abc();
+
+console.log(name);//松田聖子
+```
+
+### オブジェクトの別な作成方法
+
+```
+const myCar = new Object();
+myCar.make = 'Ford';
+myCar.model = 'Mustang';
+myCar.year = 1969;
+
+console.log(myCar);
+```
+
+## オブジェクトの全プロパティの列挙
+
+for...in ループ  
+この方法は、オブジェクトとそのプロトタイプチェーンにある列挙可能なプロパティをすべて横断します
+```
+const object = { a: 1, b: 2, c: 3 };
+
+for (const property in object) {
+    console.log(`${property}: ${object[property]}`);
+}
+```
+Object.keys(o)  
+指定されたオブジェクトが持つプロパティの 名前の配列を、通常のループで取得するのと同じ順序で返します
+```
+const object1 = {
+    a: 'somestring',
+    b: 42,
+    c: false
+};
+
+console.log(Object.keys(object1));
+```
+### オブジェクトのプロパティはドット演算子を使用する以外に次のような形式でも表すことができます  
+`変数名["プロパティ名"]`
+```
+const object1 = {
+    a: 1,
+    b: 2,
+    c: 3
+};
+
+console.log(object1["a"]);
+console.log(object1.b);// ドットでもOK
+console.log(object1["c"]);
+```
+`変数名["プロパティ名"]`　この形式はPHPの連想配列に似ています。  
+この形式のよいところはプロパティ名を文字列した場合です。
+```
+const object1 = {
+    "first name": "Michael",
+    "last name": "Jackson"
+};
+
+console.log(object1["first name"]);
+console.log(object1["last name"]);
+```
+オブジェクトのプロパティのキーに変数を使う場合は`[]`を使う
+```
+const titleKey = "タイトル";
+const authorKey = "著者";
+const priceKey = "価格";
+
+// オブジェクトの
+const book = {
+    [titleKey]: '走れメロス',
+    [authorKey]: '太宰治',
+    [priceKey]: '￥432'
+}
+
+console.log(book["タイトル"]);
+console.log(book["著者"]);
+console.log(book["価格"]);
+```
+
