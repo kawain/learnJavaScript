@@ -214,4 +214,207 @@ class Calc {
 console.log(Calc.add(1, 2));
 console.log(Calc.mul(1000, 0.8));
 ```
-続く
+
+## 継承
+
+通常のクラスです。特に必要がなければconstructorはいりません。
+```
+class Greeting {
+    say() {
+        return "Hello";
+    }
+}
+
+const obj = new Greeting();
+console.log(obj.say());
+```
+違うクラスを作って、sayメソッドを使いたい場合
+```
+class Greeting {
+    say() {
+        return "Hello";
+    }
+}
+
+const obj = new Greeting();
+console.log(obj.say());
+
+class English {
+    say() {
+        return "Hello";
+    }
+}
+
+const obj2 = new English();
+console.log(obj2.say());
+```
+上のように書くと長いので、こう書けます
+```
+class Greeting {
+    say() {
+        return "Hello";
+    }
+}
+
+const obj = new Greeting();
+console.log(obj.say());
+
+class English extends Greeting {
+}
+
+const obj2 = new English();
+console.log(obj2.say());
+```
+extends Greeting としてクラスを継承しますと、Greetingクラスのメソッドが利用できます。
+
+JavaScriptの初めから入っているStringオブジェクトがありますが、そういうクラスも継承できます。
+```
+class MyClass extends String {
+}
+
+const obj = new MyClass("hello world!");
+console.log(obj.toUpperCase());//toUpperCaseはStringオブジェクトにあるメソッド
+```
+
+## オブジェクトを配列に入れて、ループしてメソッドを実行する
+
+メソッド名は同じですが、オブジェクトにより振る舞い、実行結果が違うことを確認してください。  
+ここは重要なので100%理解して欲しいです。
+```
+// 親クラス
+class Mammals {
+    constructor(name) {
+        this.name = name;
+    }
+
+    species() {
+        console.log("哺乳類です");
+    }
+
+    speak() {
+        console.log("話せます");
+    }
+
+    walk() {
+        console.log("歩けます");
+    }
+
+    run() {
+        console.log("走れます");
+    }
+
+    swim() {
+        console.log("泳ぐこともできます");
+    }
+
+    introduction() {
+        console.log(`私は${this.name}です。`);
+    }
+}
+
+// 以下Mammalsの小クラス
+
+class Man extends Mammals {
+    constructor(name) {
+        // 親クラスのメソッド、この場合コンストラクタを呼ぶ
+        super(name);
+    }
+
+    species() {
+        // 親クラスのメソッドを呼ぶ
+        super.species();
+        console.log("人間です");
+    }
+}
+
+class Cat extends Mammals {
+    constructor(name) {
+        super(name);
+    }
+
+    species() {
+        super.species();
+        console.log("猫です");
+    }
+
+    // 親クラスのメソッドをオーバーライドしている
+    speak() {
+        console.log("にゃおと鳴きます");
+    }
+
+    run() {
+        console.log("走れます");
+    }
+
+    swim() {
+        console.log("水が嫌いです");
+    }
+}
+
+class Dog extends Mammals {
+    constructor(name) {
+        super(name);
+    }
+
+    species() {
+        super.species();
+        console.log("犬です");
+    }
+
+    speak() {
+        console.log("わんと吠えます");
+    }
+
+    run() {
+        console.log("走るの大好きです");
+    }
+
+    swim() {
+        console.log("泳ぐこともできます");
+    }
+}
+
+class Dolphin extends Mammals {
+    constructor(name) {
+        super(name);
+    }
+
+    species() {
+        super.species();
+        console.log("イルカです");
+    }
+
+    speak() {
+        console.log("鳴きます");
+    }
+
+    walk() {
+        console.log("歩けません");
+    }
+
+    run() {
+        console.log("水の中を走れます");
+    }
+
+    swim() {
+        console.log("泳ぎは得意です");
+    }
+}
+
+const arr = [
+    new Man("山田太郎"),
+    new Cat("たま"),
+    new Dog("ぽち"),
+    new Dolphin("フリッパー")
+];
+
+for (const v of arr) {
+    v.introduction();
+    v.species();
+    v.speak();
+    v.walk();
+    v.run();
+    v.swim();
+    console.log("---------------");
+}
+```
