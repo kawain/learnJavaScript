@@ -315,11 +315,7 @@ class Mammals {
 // 以下Mammalsの小クラス
 
 class Man extends Mammals {
-    constructor(name) {
-        // 親クラスのメソッド、この場合コンストラクタを呼ぶ
-        super(name);
-    }
-
+    // 親クラスのメソッドをオーバーライドしている
     species() {
         // 親クラスのメソッドを呼ぶ
         super.species();
@@ -328,16 +324,11 @@ class Man extends Mammals {
 }
 
 class Cat extends Mammals {
-    constructor(name) {
-        super(name);
-    }
-
     species() {
         super.species();
         console.log("猫です");
     }
 
-    // 親クラスのメソッドをオーバーライドしている
     speak() {
         console.log("にゃおと鳴きます");
     }
@@ -352,10 +343,6 @@ class Cat extends Mammals {
 }
 
 class Dog extends Mammals {
-    constructor(name) {
-        super(name);
-    }
-
     species() {
         super.species();
         console.log("犬です");
@@ -375,10 +362,6 @@ class Dog extends Mammals {
 }
 
 class Dolphin extends Mammals {
-    constructor(name) {
-        super(name);
-    }
-
     species() {
         super.species();
         console.log("イルカです");
@@ -417,4 +400,170 @@ for (const v of arr) {
     v.swim();
     console.log("---------------");
 }
+```
+
+### JavaScriptでもデザインパターンを考える
+
+JavaScriptは動的型付言語でもあり、インターフェイスもないのでJavaのデザインパターンは当てはまりませんが、オブジェクト指向の考えの練習をしましょう。
+
+シンプルファクトリーパターン  
+オブジェクトの生成をする関数を作り、そこで生成する考え方  
+```
+class Alphabet {
+    whoAreYou() { }
+}
+
+class A extends Alphabet {
+    whoAreYou() {
+        console.log("I'm A");
+    }
+}
+
+class B extends Alphabet {
+    whoAreYou() {
+        console.log("I'm B");
+    }
+}
+
+function factoryMethod(type) {
+    if (type === 1) {
+        return new A();
+    }
+    else {
+        return new B();
+    }
+}
+
+const obj1 = factoryMethod(1);
+obj1.whoAreYou();
+
+const obj2 = factoryMethod(2);
+obj2.whoAreYou();
+```
+Strategyパターン  
+動的に機能を変更するパターン  
+ハードとソフトの分離
+```
+// ソフト
+class ICalc {
+    calc(a, b) { }
+}
+
+class Add extends ICalc {
+    calc(a, b) {
+        return a + b;
+    }
+}
+
+class Sub extends ICalc {
+    calc(a, b) {
+        return a - b;
+    }
+}
+
+class Mul extends ICalc {
+    calc(a, b) {
+        return a * b;
+    }
+}
+
+class Div extends ICalc {
+    calc(a, b) {
+        return a / b;
+    }
+}
+
+// ハード
+class Calc {
+    // この場合はハードとソフトが別
+    static calc(obj, a, b) {
+        return obj.calc(a, b);
+    }
+}
+
+// 実行
+console.log(Calc.calc(new Add(), 9, 3));
+console.log(Calc.calc(new Sub(), 9, 3));
+console.log(Calc.calc(new Mul(), 9, 3));
+console.log(Calc.calc(new Div(), 9, 3));
+```
+下のように簡単に書けますが、Strategyパターンを使うとclass Calcを変更しなくてよいので、class Addのようなクラスを追加するだけで拡張できる。  
+```
+// ハード
+class Calc {
+    static add(a, b) {
+        return a + b;
+    }
+    static sub(a, b) {
+        return a - b;
+    }
+    static mul(a, b) {
+        return a * b;
+    }
+    static div(a, b) {
+        return a / b;
+    }
+}
+
+// 実行
+console.log(Calc.add(9, 3));
+console.log(Calc.sub(9, 3));
+console.log(Calc.mul(9, 3));
+console.log(Calc.div(9, 3));
+```
+
+## 委譲
+
+委譲 (英: delegation) とはオブジェクト指向プログラミングにおいて、あるオブジェクトの操作を一部他のオブジェクトに代替させる手法のこと。
+
+実は「継承」よりも便利なテクニックです。
+
+```
+class A {
+    foo() {
+        console.log("A.foo() is called.");
+    }
+}
+
+class B {
+    constructor(obj) {
+        this.obj = obj;
+    }
+
+    bar() {
+        this.obj.foo();
+    }
+}
+
+const bobj = new B(new A);
+// Bのオブジェクトですが、Aのメソッドが使える
+bobj.bar();
+```
+Proxyパターン  
+機能拡張するパターン
+```
+class Test {
+    showMsg(msg) {
+        console.log(msg);
+    }
+}
+
+class TestProxy {
+    constructor(obj) {
+        this.obj = obj;
+    }
+
+    //機能拡張
+    showMsg(msg) {
+        this.obj.showMsg(`★★★★★${msg}★★★★★`);
+    }
+}
+
+const obj1 = new Test();
+// Testのメソッド
+obj1.showMsg("Test");
+
+const obj2 = new TestProxy(new Test());
+// 機能拡張したTestProxyのメソッド
+obj2.showMsg("Test");
 ```
