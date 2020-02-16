@@ -425,6 +425,103 @@ btn3.addEventListener("click", () => {
     ps[2].classList.add("b")
 })
 ```
+## CSSクラスのkeyframes
+
+この場合、アニメーションしているのはCSS  
+JavaScriptは、スイッチをオンオフしている
+
+index.html
+```
+<!DOCTYPE html>
+<html lang="ja">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Document</title>
+    <style>
+        @keyframes fadeIn {
+            0% {
+                opacity: 0;
+            }
+
+            50% {
+                font-size: 3rem;
+                color: crimson;
+                opacity: 0.5;
+            }
+
+            100% {
+                opacity: 1;
+            }
+        }
+
+        @keyframes fadeOut {
+            0% {
+                opacity: 1;
+            }
+
+            100% {
+                font-size: 0rem;
+                opacity: 0;
+            }
+        }
+
+        .show {
+            animation-name: fadeIn;
+            animation-duration: 2s;
+            animation-fill-mode: forwards;
+        }
+
+        .hide {
+            animation-name: fadeOut;
+            animation-duration: 2s;
+            animation-fill-mode: forwards;
+        }
+
+    </style>
+</head>
+
+<body>
+    <h1>JavaScript</h1>
+
+    <p>Magni quia beatae asperiores error, ipsa reprehenderit possimus quibusdam iure impedit explicabo quidem, neque dicta reiciendis in, nemo ea. Vitae, temporibus veritatis?</p>
+    <p>Error nostrum tempora accusamus aperiam, fugit ex voluptatibus suscipit quibusdam minus iusto odio cumque in hic earum? Atque numquam officia odio omnis.</p>
+
+    <button id="btn1">show</button>
+    <button id="btn2">toggle</button>
+
+    <script src="./index.js"></script>
+</body>
+
+</html>
+```
+index.js
+```
+const ps = document.querySelectorAll("p")
+const btn1 = document.getElementById("btn1")
+const btn2 = document.getElementById("btn2")
+
+btn1.addEventListener("click", () => {
+    if (ps[0].classList.contains("show")) {
+        ps[0].classList.add("hide")
+        ps[0].classList.remove("show")
+        btn1.textContent = "show"
+    } else if (ps[0].classList.contains("hide")) {
+        ps[0].classList.add("show")
+        ps[0].classList.remove("hide")
+        btn1.textContent = "hide"
+    } else {
+        ps[0].classList.toggle("show")
+        btn1.textContent = "hide"
+    }
+})
+
+btn2.addEventListener("click", () => {
+    ps[1].classList.toggle("hide")
+})
+
+ps[0].style.opacity = 0
+```
 
 続く
 
