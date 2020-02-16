@@ -523,5 +523,195 @@ btn2.addEventListener("click", () => {
 ps[0].style.opacity = 0
 ```
 
+## document.title や setAttribute など
+
+document.title はページのtitleを取得、書き換え  
+setAttribute は要素の属性を取得、書き換えができます  
+まだまだ沢山機能があって書ききれませんので、知らない機能はGoogle検索をしたりして徐々に覚えていってください
+
+index.html
+```
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="UTF-8">
+    <title>タイトルです</title>
+    <style>
+        .color1 {
+            color: red;
+        }
+
+        .font1 {
+            font-weight: bold;
+            font-style: italic;
+        }
+
+        .font2 {
+            color: brown;
+            font-size: 24px;
+        }
+
+    </style>
+</head>
+
+<body>
+
+    <a href="index.html">再読込</a>
+
+    <h1 id="h1">これはテスト</h1>
+
+    <p id="p1" class="color1">DOM操作をしてみる</p>
+
+    <h2 id="h2">見出し２</h2>
+    <div id="div1">
+        <p id="p2" class="color1">document.getElementById()が有名です</p>
+
+        <h3 id="h3">見出し３</h3>
+
+        <ul id="ul_list" class="color1 font1">
+            <li>document.getElementById</li>
+            <li>document.getElementsByTagName</li>
+            <li>document.getElementsByClassName</li>
+            <li>document.querySelector</li>
+            <li>document.querySelectorAll</li>
+        </ul>
+    </div>
+
+    <div id="div2" style="display:none;font-size: 50px;">
+        終わり
+    </div>
+
+    <button id="btn1">ボタン1</button>
+    <button id="btn2">ボタン2</button>
+    <button id="btn3">ボタン3</button>
+    <button id="btn4">ボタン4</button>
+    <button id="btn5">ボタン5</button>
+    <button id="btn6">ボタン6</button>
+    <button id="btn7">ボタン7</button>
+    <button id="btn8">ボタン8</button>
+    <button id="btn9">ボタン9</button>
+    <button id="btn10">ボタン10</button>
+
+    <script src="./index.js"></script>
+</body>
+
+</html>
+```
+index.js
+```
+//関数を定義
+function func1() {
+    //ページタイトルを取得
+    let title = document.title;
+    console.log(title);
+    //変更する
+    document.title = "タイトル変更したよ！";
+}
+
+function func2() {
+    //h1タグを変更
+    //HTMLCollection
+    let h1 = document.getElementsByTagName("h1");
+    //配列のようにアクセス
+    h1[0].innerHTML = "h1を変更しました！"
+}
+
+function func3() {
+    //idを取得して文字を変えてみる
+    //HTMLElement
+    let h1 = document.getElementById("h1");
+    let h2 = document.getElementById("h2");
+    let h3 = document.getElementById("h3");
+    h1.innerHTML = "h1をgetElementByIdで取得して変更！"
+    h2.innerHTML = "h2をgetElementByIdで取得して変更！"
+    h3.innerHTML = "h3をgetElementByIdで取得して変更！"
+}
+
+function func4() {
+    //pのスタイルを変更
+    let p = document.getElementsByTagName("p");
+    for (let v of p) {
+        v.style.color = "#000000";
+        v.style.backgroundColor = "#ff0000";
+    }
+}
+
+function func5() {
+    //ulのfont1クラスを削除
+    //idで特定
+    let ul = document.getElementById("ul_list");
+    ul.classList.remove("font1");
+}
+
+function func6() {
+    //ulの2番目のliだけ大きくする
+    let ul = document.getElementById("ul_list");
+    ul.children[1].style.fontSize = "50px";
+}
+
+function func7() {
+    //func6のスタイルを削除してから
+    let ul = document.getElementById("ul_list");
+    ul.children[1].style.fontSize = "";
+
+    //div内のクラスcolor1のものだけ変更
+    let hoge = document.querySelectorAll("div .color1");
+    for (let v of hoge) {
+        //styleで書いたものは残るので削除してから行う
+        v.style.color = "";
+        v.style.backgroundColor = "";
+        v.classList.add("font2");
+    }
+}
+
+function func8() {
+    //再読込のリンクをgoogleにする
+    let a = document.getElementsByTagName("a");
+    a[0].setAttribute("href", "https://www.google.com");
+}
+
+function func9() {
+    //id="div1"の最後にimgタグを挿入
+    let div1 = document.getElementById("div1");
+    //要素の作成
+    let img = document.createElement("img");
+    img.setAttribute("src", "https://github.com/fluidicon.png");
+    div1.appendChild(img);
+}
+
+function func10() {
+    //隠していたdivを表示
+    let div2 = document.getElementById("div2");
+    div2.style.display = "block";
+}
+
+
+//ボタン1にイベントを登録
+const b1 = document.getElementById("btn1");
+b1.addEventListener("click", func1);
+//上は、一旦要素を変数に入れて、その変数にaddEventListenerした例
+//下は一気に書いた例 
+//ボタン2にイベントを登録
+document.getElementById("btn2").addEventListener("click", func2);
+//ボタン3にイベントを登録
+document.getElementById("btn3").addEventListener("click", func3);
+//ボタン4にイベントを登録
+document.getElementById("btn4").addEventListener("click", func4);
+//ボタン5にイベントを登録
+document.getElementById("btn5").addEventListener("click", func5);
+//ボタン6にイベントを登録
+document.getElementById("btn6").addEventListener("click", func6);
+//ボタン7にイベントを登録
+document.getElementById("btn7").addEventListener("click", func7);
+//ボタン8にイベントを登録
+document.getElementById("btn8").addEventListener("click", func8);
+//ボタン9にイベントを登録
+document.getElementById("btn9").addEventListener("click", func9);
+//ボタン10にイベントを登録
+document.getElementById("btn10").addEventListener("click", func10);
+```
+
+
 続く
 
