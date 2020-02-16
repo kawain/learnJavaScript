@@ -526,7 +526,7 @@ ps[0].style.opacity = 0
 ## document.title や setAttribute など
 
 document.title はページのtitleを取得、書き換え  
-setAttribute は要素の属性を取得、書き換えができます  
+setAttribute は要素に新しい属性を追加  
 まだまだ沢山機能があって書ききれませんので、知らない機能はGoogle検索をしたりして徐々に覚えていってください
 
 index.html
