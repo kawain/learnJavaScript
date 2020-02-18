@@ -711,7 +711,3 @@ document.getElementById("btn9").addEventListener("click", func9);
 //ボタン10にイベントを登録
 document.getElementById("btn10").addEventListener("click", func10);
 ```
-
-
-続く
-
