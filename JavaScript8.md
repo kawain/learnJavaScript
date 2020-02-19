@@ -334,5 +334,126 @@ form1.addEventListener("submit", showText)
 
 range.addEventListener("change", nensyuShow)
 ```
+Bootstrapに用意されているalertクラスを利用して、メッセージの色を変えています  
+alert alert-success  
+alert alert-danger  
+index.html
+```
+<!DOCTYPE html>
+<html lang="ja">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Document</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+</head>
+
+<body>
+
+    <div class="container mt-4">
+
+        <h1 class="display-4 text-center">やること<span class="text-primary">リスト</span></h1>
+
+        <form id="todo_form">
+            <div class="row">
+                <div class="col-md-2">
+                    <div class="form-group">
+                        <label for="date">日付</label>
+                        <input type="date" id="date" class="form-control">
+                    </div>
+
+                </div>
+                <div class="col-md-10">
+                    <div class="form-group">
+                        <label for="todo">やること</label>
+                        <input type="text" id="todo" class="form-control">
+                    </div>
+                </div>
+            </div>
+            <button class="btn btn-primary btn-block">追加</button>
+        </form>
+
+        <table class="table table-striped mt-5">
+            <thead>
+                <tr>
+                    <th>日付</th>
+                    <th>やること</th>
+                    <th>削除</th>
+                </tr>
+            </thead>
+            <tbody id="todo_body"></tbody>
+        </table>
+    </div>
+
+    <script src="./index.js"></script>
+</body>
+
+</html>
+```
+index.js
+```
+const container = document.querySelector(".container")
+const todoForm = document.getElementById("todo_form")
+const date = document.getElementById("date")
+const todo = document.getElementById("todo")
+const todoBody = document.getElementById("todo_body")
+
+
+function showAlert(message, className) {
+    // div要素を作り
+    const div = document.createElement("div")
+    // ここはBootstrapのクラス名指定
+    div.className = `alert alert-${className}`;
+    // テキストを追加し
+    div.appendChild(document.createTextNode(message))
+    // containerの中でdivをtodoFormの前に追加
+    container.insertBefore(div, todoForm)
+    // 上で追加した要素を2秒後に消す（Bootstrapのalertクラスが付いている要素）
+    setTimeout(() => {
+        document.querySelector(".alert").remove()
+    }, 2000)
+}
+
+function submitForm(e) {
+    e.preventDefault()
+    //入力した文字を取得
+    const dateValue = date.value
+    const todoValue = todo.value
+
+    if (dateValue === "" || todoValue === "") {
+        showAlert("入力漏れがあります", "danger")
+    } else {
+        todoBody.innerHTML += `<tr>
+        <td>${dateValue}</td>
+        <td>${todoValue}</td>
+        <td><a href="#" class="btn btn-danger btn-sm delete">X</a></td>
+        </tr>`
+
+        date.value = ""
+        todo.value = ""
+        showAlert("登録しました", "success")
+    }
+}
+
+function deleteTodo(e) {
+    e.preventDefault()
+    // e.target はクリックされた要素を参照します
+    // todoBodyのclickイベントです
+    // todoBody内のどこをクリックしてもここに来ます
+    // しかしクラス名がdeleteの要素をクリックした時だけ
+    // 以下の反応をして欲しいので if文で囲んでいます
+    if (e.target.classList.contains("delete")) {
+        // trから削除
+        // クリックされたのはa要素
+        // その親要素はtd
+        // その親要素はtr -> これごと削除する意味
+        e.target.parentElement.parentElement.remove()
+        showAlert("削除しました", "success")
+    }
+}
+
+todoForm.addEventListener("submit", submitForm)
+todoBody.addEventListener("click", deleteTodo)
+```
 
 続く
