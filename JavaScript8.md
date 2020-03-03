@@ -456,4 +456,79 @@ todoForm.addEventListener("submit", submitForm)
 todoBody.addEventListener("click", deleteTodo)
 ```
 
-続く
+### フォームデータの検証
+
+index.html
+```
+<!DOCTYPE html>
+<html lang="ja">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Document</title>
+    <style>
+        .error1 {
+            color: red;
+        }
+
+    </style>
+</head>
+
+<body>
+
+    <form id="form1" method="POST" action="#">
+        <p>id</p>
+        <input type="text" id="input1" pattern="^[A-Z_]+$" title="A-Zとアンダーバー(_)で入力してください。" maxlength="20" required>
+        <p>email</p>
+        <input type="email" id="email1" maxlength="20" required>
+        <p>password</p>
+        <input type="password" id="pw1" pattern="^[a-z]+$" title="a-zで入力してください。" minlength="6" maxlength="10" required>
+        <button type="submit">送信</button>
+        <p class="error1"></p>
+    </form>
+
+    <script src="./index.js"></script>
+</body>
+
+</html>
+```
+index.js
+```
+const form1 = document.getElementById("form1")
+const input1 = document.getElementById("input1")
+const email1 = document.getElementById("email1")
+const pw1 = document.getElementById("pw1")
+const error1 = document.querySelector(".error1")
+
+input1.addEventListener("input", (e) => {
+    const validMessage = e.target.validationMessage
+    if (validMessage) {
+        error1.innerHTML = validMessage
+    } else {
+        error1.innerHTML = ""
+    }
+})
+
+email1.addEventListener("input", (e) => {
+    const validMessage = e.target.validationMessage
+    if (validMessage) {
+        error1.innerHTML = validMessage
+    } else {
+        error1.innerHTML = ""
+    }
+})
+
+pw1.addEventListener("input", (e) => {
+    const validMessage = e.target.validationMessage
+    if (validMessage) {
+        error1.innerHTML = validMessage
+    } else {
+        error1.innerHTML = ""
+    }
+})
+
+form1.addEventListener("submit", (e) => {
+    e.preventDefault()
+    alert("ok")
+})
+```
